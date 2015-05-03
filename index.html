@@ -2,7 +2,8 @@
 <html>
 	<head>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-	<script src="functionalities.js"></script>
+	<script src="controllers.js"></script>
+	<script src="functions.js"></script>
 	
 	
 	</head>
@@ -10,14 +11,15 @@
 	
 		<div ng-app="myApp" ng-controller="myController"> 
 
-			City name blabla :<input type="text" name="cityName" ng-model="cityName">
+			City name :<input type="text" ng-model="cityName">
 			<button type="button" name="searchName" ng-click="searchName()">Search by name</button><br>
-			Latitude :<input type="number"> Longitude :<input type="number">
+			Latitude :<input type="text" ng-model="lat"> Longitude :<input type="text" ng-model="lon">
 			<button type="button" name="searchCoord" ng-click="searchCoord()">Search with coordinates</button>
-			<ul ng-hide="slctdCity">
-			<li ng-repeat="x in cities" ng-click="citySelection(x.id)">{{x.name + "," + x.sys.country}}</li>
+			<ul ng-hide="slctdCity||error">
+			<li ng-repeat="x in cities" ng-click="citySlct(x.id)">{{x.name + "," + x.sys.country}}</li>
 			</ul>
-			<p ng-show="slctdCity">{{city.id + " lat=" + city.coord.lat + " long" + city.coord.lon}}</p>
+			<p ng-show="slctdCity&&(!error)">{{city.id + " lat=" + city.coord.lat + " long" + city.coord.lon}}</p>
+			<p ng-show="error">{{err_info}}</p>
 			</div>
 	
 	</body>
