@@ -47,7 +47,7 @@ function citySelection(display, service, id){
 }
 /*-------------------------------------------------	
 	searchByCoord(display, service)
-	Gets the JSON about the city corresponding to the 'lat' and 'lon' fields and puts it in the 'cities' array of 'display'
+	Gets the JSON about the city corresponding to the 'lat' and 'lon' fields and puts it in 'city' of 'display'
 	
 	IN : display ($scope) and service ($http)
 	OUT : n/a
@@ -63,6 +63,31 @@ function searchByCoord(display, service){
 		errorOccurred(display, 1);
 	})
 }
+
+/*-------------------------------------------------	
+	searchByZip(display, service)
+	Gets the JSON about the city corresponding to 'zip' and 'country' fields and puts it in 'city' of 'diplay'
+	
+	IN : display ($scope) and service ($http)
+	OUT : n/a
+-------------------------------------------------*/
+function searchByZip(display, service){
+	display.error=false;
+	service.get("http://api.openweathermap.org/data/2.5/weather?zip=" + encodeURIComponent(display.zip) + "," + encodeURIComponent(display.country))
+	.success(function(response){
+		if(response.cod == '404'){
+			errorOccurred(display,3);
+		}
+		else{
+			display.slctdCity = true;
+			display.city = response;	
+		}
+	})
+	.error(function(){
+		errorOccurred(display,1);
+	})
+}
+
 /*-------------------------------------------------
 	errorOccurred(display, code)
 	Performs the displaying of the error encountered. The error is identified by its 'code'
@@ -80,6 +105,12 @@ function errorOccurred(display, code){
 		
 		case 2:{
 			display.err_info = "No city was found";
+			display.error = true;
+			display.slctdCity = true;
+		}
+		
+		case 3:{
+			display.err_info = "ZIP codes not available in this country"
 			display.error = true;
 			display.slctdCity = true;
 		}

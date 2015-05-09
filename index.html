@@ -13,6 +13,8 @@
 
 			City name :<input type="text" ng-model="cityName">
 			<button type="button" name="searchName" ng-click="searchName()">Search by name</button><br>
+			ZIP code :<input type="number" ng-model="zip"> Country :<input type="text" ng-model="country">
+			<button type="button" name="searchZip" ng-click="searchZip()">Search by ZIP code</button><br>
 			Latitude :<input type="text" ng-model="lat"> Longitude :<input type="text" ng-model="lon">
 			<button type="button" name="searchCoord" ng-click="searchCoord()">Search with coordinates</button>
 			<ul ng-hide="slctdCity||error">

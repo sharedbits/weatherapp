@@ -9,6 +9,9 @@ app.controller('myController', function($scope, $http) {
 	$scope.searchCoord = function(){//will display the weather info about the city nearest to the entered coordinates
 		searchByCoord($scope, $http);
 	}
+	$scope.searchZip = function(){
+		searchByZip($scope, $http);
+	}
 	$scope.citySlct = function(id){//will display the weather info about the city clicked in the proposed list
 		citySelection($scope, $http, id);
 	}
