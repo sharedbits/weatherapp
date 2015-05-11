@@ -7,7 +7,10 @@
 -------------------------------------------------*/
 function searchByName(display, service){
 	display.error = false;
-	service.get("http://api.openweathermap.org/data/2.5/find?q=" + encodeURIComponent(display.cityName) + "&type=like")
+	service.get("http://api.openweathermap.org/data/2.5/find?q="
+		+ encodeURIComponent(display.cityName)
+		+ "&type=like"
+		+ "&lang=" + encodeURIComponent(lang))
 		.success(function (response) {
 			if(response.count > 1){
 				display.slctdCity = false;
@@ -25,6 +28,55 @@ function searchByName(display, service){
 		.error(function(){
 		errorOccurred(display, 1);
 		})
+}
+
+/*-------------------------------------------------	
+	searchByCoord(display, service)
+	Gets the JSON about the city corresponding to the 'lat' and 'lon' fields and puts it in 'city' of 'display'
+	
+	IN : display ($scope) and service ($http)
+	OUT : n/a
+-------------------------------------------------*/
+function searchByCoord(display, service){
+	display.error = false;
+	service.get("http://api.openweathermap.org/data/2.5/weather?lat="
+		+ encodeURIComponent(display.lat)
+		+ "&lon=" + encodeURIComponent(display.lon)
+		+ "&lang=" + encodeURIComponent(lang))
+	.success(function(response){
+		display.slctdCity = true;
+		display.city = response;
+	})
+	.error(function(){
+		errorOccurred(display, 1);
+	})
+}
+
+/*-------------------------------------------------	
+	searchByZip(display, service)
+	Gets the JSON about the city corresponding to 'zip' and 'country' fields and puts it in 'city' of 'display'
+	
+	IN : display ($scope) and service ($http)
+	OUT : n/a
+-------------------------------------------------*/
+function searchByZip(display, service){
+	display.error=false;
+	service.get("http://api.openweathermap.org/data/2.5/weather?zip="
+	+ encodeURIComponent(display.zip)
+	+ "," + encodeURIComponent(display.country) +
+	"&lang" + encodeURIComponent(lang))
+	.success(function(response){
+		if(response.cod == '404'){
+			errorOccurred(display,3);
+		}
+		else{
+			display.slctdCity = true;
+			display.city = response;	
+		}
+	})
+	.error(function(){
+		errorOccurred(display,1);
+	})
 }
 
 /*-------------------------------------------------
@@ -45,47 +97,16 @@ function citySelection(display, service, id){
 		errorOccurred(display, 1);
 	})
 }
-/*-------------------------------------------------	
-	searchByCoord(display, service)
-	Gets the JSON about the city corresponding to the 'lat' and 'lon' fields and puts it in 'city' of 'display'
-	
-	IN : display ($scope) and service ($http)
-	OUT : n/a
--------------------------------------------------*/
-function searchByCoord(display, service){
-	display.error = false;
-	service.get("http://api.openweathermap.org/data/2.5/weather?lat="+ encodeURIComponent(display.lat) + "&lon=" + encodeURIComponent(display.lon))
-	.success(function(response){
-		display.slctdCity = true;
-		display.city = response;
-	})
-	.error(function(){
-		errorOccurred(display, 1);
-	})
-}
 
-/*-------------------------------------------------	
-	searchByZip(display, service)
-	Gets the JSON about the city corresponding to 'zip' and 'country' fields and puts it in 'city' of 'diplay'
+/*-------------------------------------------------
+	reloadJSONDisplay(display, service)
+	Reloads the JSON data from the weather API in the newly selected language
 	
-	IN : display ($scope) and service ($http)
+	IN : display ($scope), and service ($http)
 	OUT : n/a
 -------------------------------------------------*/
-function searchByZip(display, service){
-	display.error=false;
-	service.get("http://api.openweathermap.org/data/2.5/weather?zip=" + encodeURIComponent(display.zip) + "," + encodeURIComponent(display.country))
-	.success(function(response){
-		if(response.cod == '404'){
-			errorOccurred(display,3);
-		}
-		else{
-			display.slctdCity = true;
-			display.city = response;	
-		}
-	})
-	.error(function(){
-		errorOccurred(display,1);
-	})
+function reloadJSONDisplay(display,service){
+	
 }
 
 /*-------------------------------------------------
@@ -98,19 +119,20 @@ function searchByZip(display, service){
 function errorOccurred(display, code){
 	switch(code){
 		case 1:{
-			display.err_info = "Connection problem with database";
+			display.err_info = "ERRCASE1";
 			display.error = true;
 			display.slctdCity = true;
 		}
 		
 		case 2:{
-			display.err_info = "No city was found";
+			display.err_info = "ERRCASE2";
 			display.error = true;
 			display.slctdCity = true;
 		}
 		
 		case 3:{
-			display.err_info = "ZIP codes not available in this country"
+			//display.err_info = "ZIP codes not available in this country"
+			display.err_info = "ERRCASE3";
 			display.error = true;
 			display.slctdCity = true;
 		}

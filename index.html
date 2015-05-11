@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
 	<head>
+	<meta charset="UTF-8" />
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="angular-translate.min.js"></script>
 	<script src="controllers.js"></script>
 	<script src="functions.js"></script>
+	<script src="languages.js"></script>
 	
 	
 	</head>
 	<body>
 	
 		<div ng-app="myApp" ng-controller="myController"> 
-
-			City name :<input type="text" ng-model="cityName">
-			<button type="button" name="searchName" ng-click="searchName()">Search by name</button><br>
-			ZIP code :<input type="number" ng-model="zip"> Country :<input type="text" ng-model="country">
-			<button type="button" name="searchZip" ng-click="searchZip()">Search by ZIP code</button><br>
-			Latitude :<input type="text" ng-model="lat"> Longitude :<input type="text" ng-model="lon">
-			<button type="button" name="searchCoord" ng-click="searchCoord()">Search with coordinates</button>
+		
+			<a href="#" ng-click="changeLanguage('en')">{{'BUTTON_LANG_EN' | translate}}</a>
+			<a href="#" ng-click="changeLanguage('fr')">{{'BUTTON_LANG_FR' | translate}}</a>
+			<p>{{'CITYNAME' | translate}}<input type="text" ng-model="cityName">
+			<button type="button" name="searchName" ng-click="searchName()">{{'SEARCHNAME' | translate}}</button></p>
+			<p>{{'ZIPCODE' | translate}}<input type="number" ng-model="zip"> {{'COUNTRY' | translate}}<input type="text" ng-model="country">
+			<button type="button" name="searchZip" ng-click="searchZip()">{{'SEARCHZIP' | translate}}</button></p>
+			<p>{{'LATITUDE' | translate}}<input type="text" ng-model="lat">{{'LONGITUDE' | translate}}<input type="text" ng-model="lon">
+			<button type="button" name="searchCoord" ng-click="searchCoord()">{{'SEARCHCOORD' | translate}}</button></p>
 			<ul ng-hide="slctdCity||error">
 			<li ng-repeat="x in cities" ng-click="citySlct(x.id)">{{x.name + "," + x.sys.country}}</li>
 			</ul>
-			<p ng-show="slctdCity&&(!error)">{{city.id + " lat=" + city.coord.lat + " long" + city.coord.lon}}</p>
-			<p ng-show="error">{{err_info}}</p>
+			<p ng-show="slctdCity&&(!error)">{{city.name + " lat=" + city.coord.lat + " long" + city.coord.lon}}</p>
+			<p ng-show="error">{{err_info | translate}}</p>
 			</div>
 	
 	</body>
