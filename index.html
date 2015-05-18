@@ -12,7 +12,8 @@
 	</head>
 	<body>
 	
-		<div ng-app="myApp" ng-controller="myController"> 
+		<div ng-app="myApp"> 
+		<div ng-controller="myController"> 
 		
 			<a href="#" ng-click="changeLanguage('en')">{{'BUTTON_LANG_EN' | translate}}</a>
 			<a href="#" ng-click="changeLanguage('fr')">{{'BUTTON_LANG_FR' | translate}}</a>
@@ -25,9 +26,19 @@
 			<ul ng-hide="slctdCity||error">
 			<li ng-repeat="x in cities" ng-click="citySlct(x.id)">{{x.name + "," + x.sys.country}}</li>
 			</ul>
-			<p ng-show="slctdCity&&(!error)">{{city.name + " lat=" + city.coord.lat + " long" + city.coord.lon}}</p>
+			<p ng-show="slctdCity&&(!error)">
+				<a href="#" ng-click="unitChoice('metric')">{{'METRIC' | translate}}</a>
+				<a href="#" ng-click="unitChoice('imperial')">{{'IMPERIAL' | translate}}</a>
+				{{city.name 
+				+ " lat=" + city.coord.lat 
+				+ " long=" + city.coord.lon 
+				+ " " + ('WEATHER' | translate) + " : " + city.weather[0].description
+				+ " " + ('TEMPERATURE' | translate) + " : " + city.main.temp + unit
+				+ " " + icon}}
+			</p>
 			<p ng-show="error">{{err_info | translate}}</p>
-			</div>
+		</div>
+		</div>
 	
 	</body>
 </html>

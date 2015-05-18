@@ -10,7 +10,8 @@ function searchByName(display, service){
 	service.get("http://api.openweathermap.org/data/2.5/find?q="
 		+ encodeURIComponent(display.cityName)
 		+ "&type=like"
-		+ "&lang=" + encodeURIComponent(lang))
+		+ "&lang=" + encodeURIComponent(lang)
+		+ "&units=" + encodeURIComponent(un))
 		.success(function (response) {
 			if(response.count > 1){
 				display.slctdCity = false;
@@ -19,6 +20,7 @@ function searchByName(display, service){
 			else{
 				if(response.count == 1){
 					citySelection(display, service, response.list[0].id);
+					iconId = response.list[0].weather[0].id;
 				}
 				else{
 					errorOccurred(display, 2);
@@ -42,7 +44,8 @@ function searchByCoord(display, service){
 	service.get("http://api.openweathermap.org/data/2.5/weather?lat="
 		+ encodeURIComponent(display.lat)
 		+ "&lon=" + encodeURIComponent(display.lon)
-		+ "&lang=" + encodeURIComponent(lang))
+		+ "&lang=" + encodeURIComponent(lang)
+		+ "&units=" + encodeURIComponent(un))
 	.success(function(response){
 		display.slctdCity = true;
 		display.city = response;
@@ -63,8 +66,9 @@ function searchByZip(display, service){
 	display.error=false;
 	service.get("http://api.openweathermap.org/data/2.5/weather?zip="
 	+ encodeURIComponent(display.zip)
-	+ "," + encodeURIComponent(display.country) +
-	"&lang" + encodeURIComponent(lang))
+	+ "," + encodeURIComponent(display.country)
+	+ "&lang=" + encodeURIComponent(lang)
+	+ "&units=" + encodeURIComponent(un))
 	.success(function(response){
 		if(response.cod == '404'){
 			errorOccurred(display,3);
@@ -88,25 +92,41 @@ function searchByZip(display, service){
 -------------------------------------------------*/
 function citySelection(display, service, id){
 	display.error = false;
-	service.get("http://api.openweathermap.org/data/2.5/weather?id=" + id)
+	service.get("http://api.openweathermap.org/data/2.5/weather?id=" 
+	+ id
+	+ "&lang=" + encodeURIComponent(lang)
+	+ "&units=" + encodeURIComponent(un))
 	.success(function(response){
 		display.slctdCity = true;
 		display.city = response;
+		getIcon(display, service, response.weather[0].id);
 	})
 	.error(function(){
 		errorOccurred(display, 1);
 	})
 }
 
+function getIcon(display, service, id){
+	service.get("http://openweathermap.org/img/w/"+ encodeURIComponent(id) +".png")
+	.success(function(response){
+		display.icon = response;
+	})
+}
+
 /*-------------------------------------------------
 	reloadJSONDisplay(display, service)
-	Reloads the JSON data from the weather API in the newly selected language
+	Reloads the JSON data from the weather API in the newly selected parameters (temperature system, language)
 	
 	IN : display ($scope), and service ($http)
 	OUT : n/a
 -------------------------------------------------*/
 function reloadJSONDisplay(display,service){
-	
+	if(display.slctdCity){
+		citySelection(display,service,display.city.id);
+	}
+	else{
+		searchByName(display, service);
+	}
 }
 
 /*-------------------------------------------------
@@ -131,7 +151,6 @@ function errorOccurred(display, code){
 		}
 		
 		case 3:{
-			//display.err_info = "ZIP codes not available in this country"
 			display.err_info = "ERRCASE3";
 			display.error = true;
 			display.slctdCity = true;
