@@ -5,7 +5,7 @@
 	IN : display ($scope) and service ($http)
 	OUT : n/a
 -------------------------------------------------*/
-function searchByName(display, service){
+function searchByName(display, service, store){
 	display.error = false;
 	service.get("http://api.openweathermap.org/data/2.5/find?q="
 		+ encodeURIComponent(display.cityName)
@@ -19,7 +19,7 @@ function searchByName(display, service){
 				}
 			else{
 				if(response.count == 1){
-					citySelection(display, service, response.list[0].id);
+					citySelection(display, service, response.list[0].id, store);
 					iconId = response.list[0].weather[0].id;
 				}
 				else{
@@ -39,7 +39,7 @@ function searchByName(display, service){
 	IN : display ($scope) and service ($http)
 	OUT : n/a
 -------------------------------------------------*/
-function searchByCoord(display, service){
+function searchByCoord(display, service, store){
 	display.error = false;
 	service.get("http://api.openweathermap.org/data/2.5/weather?lat="
 		+ encodeURIComponent(display.lat)
@@ -49,6 +49,7 @@ function searchByCoord(display, service){
 	.success(function(response){
 		display.slctdCity = true;
 		display.city = response;
+		save(store, response)
 	})
 	.error(function(){
 		errorOccurred(display, 1);
@@ -62,7 +63,7 @@ function searchByCoord(display, service){
 	IN : display ($scope) and service ($http)
 	OUT : n/a
 -------------------------------------------------*/
-function searchByZip(display, service){
+function searchByZip(display, service, store){
 	display.error=false;
 	service.get("http://api.openweathermap.org/data/2.5/weather?zip="
 	+ encodeURIComponent(display.zip)
@@ -76,6 +77,7 @@ function searchByZip(display, service){
 		else{
 			display.slctdCity = true;
 			display.city = response;	
+			save(store, response)
 		}
 	})
 	.error(function(){
@@ -90,7 +92,7 @@ function searchByZip(display, service){
 	IN : display ($scope), service ($http) and city id (id)	
 	OUT : n/a
 -------------------------------------------------*/
-function citySelection(display, service, id){
+function citySelection(display, service, id, store){
 	display.error = false;
 	service.get("http://api.openweathermap.org/data/2.5/weather?id=" 
 	+ id
@@ -99,19 +101,41 @@ function citySelection(display, service, id){
 	.success(function(response){
 		display.slctdCity = true;
 		display.city = response;
-		getIcon(display, service, response.weather[0].id);
+		display.icon = response.weather[0].icon;
+		getForecast(display, service);
+		save(store, response)
 	})
 	.error(function(){
 		errorOccurred(display, 1);
 	})
 }
 
-function getIcon(display, service, id){
-	service.get("http://openweathermap.org/img/w/"+ encodeURIComponent(id) +".png")
-	.success(function(response){
-		display.icon = response;
-	})
+/*-------------------------------------------------
+	getForecast(display, service)
+	Gets the JSON for the X days coming, X defined by 'frcstDay'
+	
+	IN : display ($scope), and service ($http)
+	OUT : n/a
+-------------------------------------------------*/
+function getForecast(display, service){
+	if(display.frcstDay == '')	display.frcst = false;
+	else{
+		service.get("http://api.openweathermap.org/data/2.5/forecast/daily?id="
+		+ encodeURIComponent(display.city.id)
+		+ "&mode=json"
+		+ "&lang=" + encodeURIComponent(lang)
+		+ "&units=" + encodeURIComponent(un)
+		+ "&cnt=" + encodeURIComponent(display.frcstDay))
+		.success(function(response){
+			display.frcst = true;
+			display.forecast = response.list;
+		})
+		.error(function(){
+			errorOccured(display, 1);
+		})
+	}
 }
+
 
 /*-------------------------------------------------
 	reloadJSONDisplay(display, service)
@@ -120,13 +144,25 @@ function getIcon(display, service, id){
 	IN : display ($scope), and service ($http)
 	OUT : n/a
 -------------------------------------------------*/
-function reloadJSONDisplay(display,service){
+function reloadJSONDisplay(display,service, store){
 	if(display.slctdCity){
-		citySelection(display,service,display.city.id);
+		citySelection(display,service,display.city.id, store);
 	}
 	else{
 		searchByName(display, service);
 	}
+}
+
+/*-------------------------------------------------
+	save(store, city)
+	Stores the data concerning the last selected city in browser's local storage
+	
+	IN : store ($localStorage), and city (whole JSON)
+	OUT :
+-------------------------------------------------*/
+function save(store, city){
+	store.id = city.id;
+	store.name = city.name;
 }
 
 /*-------------------------------------------------

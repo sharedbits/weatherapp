@@ -2,8 +2,9 @@
 <html>
 	<head>
 	<meta charset="UTF-8" />
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="angular.min.js"></script>
 	<script src="angular-translate.min.js"></script>
+	<script src="ngStorage.min.js"></script>
 	<script src="controllers.js"></script>
 	<script src="functions.js"></script>
 	<script src="languages.js"></script>
@@ -17,6 +18,16 @@
 		
 			<a href="#" ng-click="changeLanguage('en')">{{'BUTTON_LANG_EN' | translate}}</a>
 			<a href="#" ng-click="changeLanguage('fr')">{{'BUTTON_LANG_FR' | translate}}</a>
+			<span class="nullable">
+			<select ng-model="frcstDay" ng-change="getFrcst()" >
+			<option value="">{{'FORECAST' | translate}}</option>
+			<option value="1">1 {{'DAY' | translate}}</option>
+			<option value="3">3 {{'DAYS' | translate}}</option>
+			<option value="7">7 {{'DAYS' | translate}}</option>
+			<option value="10">10 {{'DAYS' | translate}}</option>
+			<option value="14">14 {{'DAYS' | translate}}</option>
+			</select>
+			</span>
 			<p>{{'CITYNAME' | translate}}<input type="text" ng-model="cityName">
 			<button type="button" name="searchName" ng-click="searchName()">{{'SEARCHNAME' | translate}}</button></p>
 			<p>{{'ZIPCODE' | translate}}<input type="number" ng-model="zip"> {{'COUNTRY' | translate}}<input type="text" ng-model="country">
@@ -33,9 +44,13 @@
 				+ " lat=" + city.coord.lat 
 				+ " long=" + city.coord.lon 
 				+ " " + ('WEATHER' | translate) + " : " + city.weather[0].description
-				+ " " + ('TEMPERATURE' | translate) + " : " + city.main.temp + unit
-				+ " " + icon}}
+				+ " " + ('TEMPERATURE' | translate) + " : " + city.main.temp + unit}}
+				<img ng-src="http://openweathermap.org/img/w/{{icon}}.png" />
+				<br>
 			</p>
+			<ul ng-show="slctdCity&&(!error)&&frcst">
+				<li ng-repeat="x in forecast">{{x.weather[0].main}}</li>
+			</ul>
 			<p ng-show="error">{{err_info | translate}}</p>
 		</div>
 		</div>
