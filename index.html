@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<script src="jquery.min.js"></script>
+	<script src="bootstrap.min.js"></script>
 	<script src="angular.min.js"></script>
 	<script src="angular-translate.min.js"></script>
 	<script src="ngStorage.min.js"></script>
 	<script src="controllers.js"></script>
 	<script src="functions.js"></script>
-	<script src="languages.js"></script>
-	
+	<script src="languages.js"></script>	
 	
 	</head>
 	<body>
 	
 		<div ng-app="myApp"> 
 		<div ng-controller="myController"> 
-		
-			<a href="#" ng-click="changeLanguage('en')">{{'BUTTON_LANG_EN' | translate}}</a>
-			<a href="#" ng-click="changeLanguage('fr')">{{'BUTTON_LANG_FR' | translate}}</a>
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" id="language" data-toggle="dropdown">{{'CHANGE_LANGUAGE' | translate}}
+				<span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				<li><a href="#" ng-click="changeLanguage('en')">{{'BUTTON_LANG_EN' | translate}}</a></li>
+				<li><a href="#" ng-click="changeLanguage('fr')">{{'BUTTON_LANG_FR' | translate}}</a></li>
+				</ul>
+			</div>
 			<span class="nullable">
 			<select ng-model="frcstDay" ng-change="getFrcst()" >
 			<option value="">{{'FORECAST' | translate}}</option>
@@ -28,12 +35,27 @@
 			<option value="14">14 {{'DAYS' | translate}}</option>
 			</select>
 			</span>
-			<p>{{'CITYNAME' | translate}}<input type="text" ng-model="cityName">
-			<button type="button" name="searchName" ng-click="searchName()">{{'SEARCHNAME' | translate}}</button></p>
-			<p>{{'ZIPCODE' | translate}}<input type="number" ng-model="zip"> {{'COUNTRY' | translate}}<input type="text" ng-model="country">
-			<button type="button" name="searchZip" ng-click="searchZip()">{{'SEARCHZIP' | translate}}</button></p>
-			<p>{{'LATITUDE' | translate}}<input type="text" ng-model="lat">{{'LONGITUDE' | translate}}<input type="text" ng-model="lon">
-			<button type="button" name="searchCoord" ng-click="searchCoord()">{{'SEARCHCOORD' | translate}}</button></p>
+			<form role="form">
+			<div class="form-group col-xs-4">
+				<label for="cityName" class="control-label">{{'CITYNAME' | translate}}</label>
+				<input type="text" ng-model="cityName" placeholder="{{'TYPE_CITY' | translate}}" class="form-control"/>
+				<button type="button" class="btn" ng-disabled="!cityName" name="searchName" ng-click="searchName()">{{'SEARCHNAME' | translate}}</button>
+			</div>
+			<div class="form-group col-xs-4">
+				<label for="zip" class="control-label">{{'ZIPCODE' | translate}}</label>
+				<input type="number" ng-model="zip" placeholder="{{'TYPE_ZIP' | translate}}" class="form-control">
+				<label for="country" class="control-label">{{'COUNTRY' | translate}}</label>
+				<input type="text" ng-model="country" placeholder="{{'TYPE_COUNTRY' | translate}}" class="form-control">
+				<button type="button" class="btn" ng-disabled="!zip||!country" name="searchZip" ng-click="searchZip()">{{'SEARCHZIP' | translate}}</button>
+			</div>
+			<div class="form-group col-xs-4">
+				<label for="lat" class="control-label">{{'LATITUDE' | translate}}</label>
+				<input type="text" ng-model="lat" placeholder="{{'TYPE_LAT' | translate}}" class="form-control">
+				<label for="lon">{{'LONGITUDE' | translate}}</label>
+				<input type="text" ng-model="lon" placeholder="{{'TYPE_LON' | translate}}" class="form-control">
+				<button type="button" class="btn" ng-disabled="!lon||!lat" name="searchCoord" ng-click="searchCoord()">{{'SEARCHCOORD' | translate}}</button>
+			</div>
+			</form>
 			<ul ng-hide="slctdCity||error">
 			<li ng-repeat="x in cities" ng-click="citySlct(x.id)">{{x.name + "," + x.sys.country}}</li>
 			</ul>

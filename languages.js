@@ -16,7 +16,13 @@ var translationEN = {
 		ERRCASE2:'No city found',
 		ERRCASE3:'ZIP codes not available in this country',
 		BUTTON_LANG_EN:'English',
-		BUTTON_LANG_FR:'French'
+		BUTTON_LANG_FR:'French',
+		CHANGE_LANGUAGE:'Language',
+		TYPE_COUNTRY:'Type a country name',
+		TYPE_CITY:'Type a city name',
+		TYPE_LAT:'Type the latitude',
+		TYPE_LON:'Type the longitude',
+		TYPE_ZIP:'Type a ZIP code'
 };
 
 var translationFR = {
@@ -37,5 +43,11 @@ var translationFR = {
 		ERRCASE2:'Aucune ville trouvée',
 		ERRCASE3:'Ce pays n\'utilise pas les codes postaux',
 		BUTTON_LANG_EN:'Anglais',
-		BUTTON_LANG_FR:'Français'
+		BUTTON_LANG_FR:'Français',
+		CHANGE_LANGUAGE:'Langue',
+		TYPE_COUNTRY:'Saisissez un nom de pays',
+		TYPE_CITY:'Saisissez un nom de ville',
+		TYPE_LAT:'Saisissez la latitude',
+		TYPE_LON:'Saisissez la longitude',
+		TYPE_ZIP:'saisissez un code postal'
 };

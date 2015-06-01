@@ -7,7 +7,7 @@ app.controller('myController', function($scope, $http, $translate, $localStorage
 	$scope.error = false;
 	$scope.frcst = false;
 	$scope.frcstDay = "";
-	$scope.cityName = $localStorage.name;
+	//$scope.cityName = $localStorage.name;
 	$scope.unit = "°C";
 	$scope.searchName = function(){	//will display a list of the different cities found, else the weather info about the only city found, else error message
 		searchByName($scope, $http, $localStorage);	
@@ -37,6 +37,8 @@ app.controller('myController', function($scope, $http, $translate, $localStorage
 	$scope.getFrcst = function(){
 		getForecast($scope,$http);
 	}
+	$scope.zipClass="";
+	$scope.coordClass="";
 	citySelection($scope, $http, $localStorage.id, $localStorage);
 });
 
