@@ -14,68 +14,149 @@
 	
 	</head>
 	<body>
-	
 		<div ng-app="myApp"> 
-		<div ng-controller="myController"> 
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" id="language" data-toggle="dropdown">{{'CHANGE_LANGUAGE' | translate}}
+		<div ng-controller="myController">
+		<nav class="navbar navbar-default  navbar-fixed-top">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <a class="navbar-brand" href="#">The Weather App</a>
+			</div>
+			<div>
+			  <ul class="nav navbar-nav">
+				<!-- Language selection button -->
+				<li><div class="dropdown" style="margin-top: 10px;">
+				<button class="btn btn-primary dropdown-toggle" type="button" id="language" data-toggle="dropdown" style="margin-left: 15px;">{{'CHANGE_LANGUAGE' | translate}}
 				<span class="caret"></span></button>
 				<ul class="dropdown-menu">
 				<li><a href="#" ng-click="changeLanguage('en')">{{'BUTTON_LANG_EN' | translate}}</a></li>
 				<li><a href="#" ng-click="changeLanguage('fr')">{{'BUTTON_LANG_FR' | translate}}</a></li>
 				</ul>
+				</div></li>
+				
+				<!-- Unit selection button -->
+				<li><div class="dropdown" style="margin-top: 10px; margin-left: 5px;">
+					<button class="btn dropdown-toggle" type="button" id="unit-choice" data-toggle="dropdown">{{'CHANGE_UNIT' | translate}}
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu col-md-1 text-center">
+					<li><a href="#" ng-click="unitChoice('metric')">{{'METRIC' | translate}}</a></li>
+					<li><a href="#" ng-click="unitChoice('imperial')">{{'IMPERIAL' | translate}}</a></li>
+					</ul>
+				</div></li>
+				
+				<!-- Forecast selection button -->
+				<li><div style="margin-top: 10px; margin-left: 5px;">
+					<select class="form-control nullable" id="forecast" ng-model="frcstDay" ng-change="getFrcst()">
+						<option value="">{{'FORECAST' | translate}}</option>
+						<option value="1">1 {{'DAY' | translate}}</option>
+						<option value="3">3 {{'DAYS' | translate}}</option>
+						<option value="7">7 {{'DAYS' | translate}}</option>
+						<option value="10">10 {{'DAYS' | translate}}</option>
+						<option value="14">14 {{'DAYS' | translate}}</option>
+					</select>
+				</div></li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+			  <li style="padding-top: 15px;">Yann Lelong, 2015</li>
+			  </ul>
 			</div>
-			<span class="nullable">
-			<select ng-model="frcstDay" ng-change="getFrcst()" >
-			<option value="">{{'FORECAST' | translate}}</option>
-			<option value="1">1 {{'DAY' | translate}}</option>
-			<option value="3">3 {{'DAYS' | translate}}</option>
-			<option value="7">7 {{'DAYS' | translate}}</option>
-			<option value="10">10 {{'DAYS' | translate}}</option>
-			<option value="14">14 {{'DAYS' | translate}}</option>
-			</select>
-			</span>
-			<form role="form">
-			<div class="form-group col-xs-4">
+		  </div>
+		</nav>
+			
+			<form role="form" style="margin-top: 60px;">
+			<!-- Selection by city field -->
+			<div class="form-group col-md-4">
 				<label for="cityName" class="control-label">{{'CITYNAME' | translate}}</label>
 				<input type="text" ng-model="cityName" placeholder="{{'TYPE_CITY' | translate}}" class="form-control"/>
-				<button type="button" class="btn" ng-disabled="!cityName" name="searchName" ng-click="searchName()">{{'SEARCHNAME' | translate}}</button>
+				<button type="button" class="btn" ng-disabled="!cityName" name="searchName" ng-click="searchName()" style="margin-top: 10px;">{{'SEARCHNAME' | translate}}</button>
 			</div>
-			<div class="form-group col-xs-4">
+			
+			<!-- Selection by ZIP code field -->
+			<div class="form-group col-md-4">
 				<label for="zip" class="control-label">{{'ZIPCODE' | translate}}</label>
 				<input type="number" ng-model="zip" placeholder="{{'TYPE_ZIP' | translate}}" class="form-control">
 				<label for="country" class="control-label">{{'COUNTRY' | translate}}</label>
 				<input type="text" ng-model="country" placeholder="{{'TYPE_COUNTRY' | translate}}" class="form-control">
-				<button type="button" class="btn" ng-disabled="!zip||!country" name="searchZip" ng-click="searchZip()">{{'SEARCHZIP' | translate}}</button>
+				<button type="button" class="btn" ng-disabled="!zip||!country" name="searchZip" ng-click="searchZip()" style="margin-top: 10px;">{{'SEARCHZIP' | translate}}</button>
 			</div>
-			<div class="form-group col-xs-4">
+			
+			<!-- Selection by coordinates field -->
+			<div class="form-group col-md-4">
 				<label for="lat" class="control-label">{{'LATITUDE' | translate}}</label>
 				<input type="text" ng-model="lat" placeholder="{{'TYPE_LAT' | translate}}" class="form-control">
 				<label for="lon">{{'LONGITUDE' | translate}}</label>
 				<input type="text" ng-model="lon" placeholder="{{'TYPE_LON' | translate}}" class="form-control">
-				<button type="button" class="btn" ng-disabled="!lon||!lat" name="searchCoord" ng-click="searchCoord()">{{'SEARCHCOORD' | translate}}</button>
+				<button type="button" class="btn" ng-disabled="!lon||!lat" name="searchCoord" ng-click="searchCoord()" style="margin-top: 10px;">{{'SEARCHCOORD' | translate}}</button>
 			</div>
 			</form>
-			<ul ng-hide="slctdCity||error">
-			<li ng-repeat="x in cities" ng-click="citySlct(x.id)">{{x.name + "," + x.sys.country}}</li>
-			</ul>
-			<p ng-show="slctdCity&&(!error)">
-				<a href="#" ng-click="unitChoice('metric')">{{'METRIC' | translate}}</a>
-				<a href="#" ng-click="unitChoice('imperial')">{{'IMPERIAL' | translate}}</a>
-				{{city.name 
-				+ " lat=" + city.coord.lat 
-				+ " long=" + city.coord.lon 
-				+ " " + ('WEATHER' | translate) + " : " + city.weather[0].description
-				+ " " + ('TEMPERATURE' | translate) + " : " + city.main.temp + unit}}
-				<img ng-src="http://openweathermap.org/img/w/{{icon}}.png" />
-				<br>
-			</p>
-			<ul ng-show="slctdCity&&(!error)&&frcst">
-				<li ng-repeat="x in forecast">{{x.weather[0].main}}</li>
-			</ul>
-			<p ng-show="error">{{err_info | translate}}</p>
+			
+			<!-- In case several cities can be selected, propose to click on the one you actually want -->
+			<table class="table-hover col-md-2" ng-hide="slctdCity||error" style="margin-left: 15px;">
+				<thead ng-hide="slctdCity||error"><tr><td>{{'SELECT_CITY' | translate}}</td></tr></thead>
+				<tbody>
+				<tr ng-repeat="x in cities" ng-click="citySlct(x.id)">
+					<td>{{x.name + "," + x.sys.country}}</td>
+				</tr>
+				</tbody>
+			</table>
+			
+			<!-- The current weather information for the selected city -->
+			<div ng-show="slctdCity&&(!error)">
+				<form role="form">
+				<div class="col-md-11 text-center">
+					<h2>{{city.name}}</h2>
+					<table class="table-bordered col-md-11">
+					<tbody><tr>
+					<td>{{'TODAY' | translate}} : {{date | date:'dd/MM/yyyy'}}</td>
+					<td>{{'CURRENT' | translate}} : {{city.weather[0].description}}</td>
+					<td>{{'TEMPERATURE' | translate}} : {{city.main.temp + unit_temp}}</td>
+					<td><img ng-src="http://openweathermap.org/img/w/{{icon}}.png" /></td>
+					</tr><tr>
+					<td>{{'WIND' | translate}} : {{city.wind.speed + unit_speed}}</td>
+					<td>{{'TEMPMIN' | translate}} : {{city.main.temp_min + unit_temp}}</td>
+					<td>{{'TEMPMAX' | translate}} : {{city.main.temp_max + unit_temp}}</td>
+					</tr><tr>
+					<td>{{'LATITUDE' | translate}} {{city.coord.lat}}</td>
+					<td>{{'LONGITUDE' | translate}} {{city.coord.lon}} </td>
+					</tr>
+				</tbody>
+				</table>
+				</div>
+				</form>
+			</div>
+			
+				<!-- The forecast information for the selected city -->
+				<table class="table-bordered col-md-11" ng-show="slctdCity&&(!error)&&frcst" style="margin-left: 15px;">
+				<tbody>
+				<tr ng-repeat="x in forecast">
+					<td>+{{$index + 1}} {{'DAYS' | translate}}</td>
+					<td><img ng-src="http://openweathermap.org/img/w/{{x.weather[0].icon}}.png" /></td>
+					<td>{{x.weather[0].main}}</td>
+					<td>{{'TEMPMIN' | translate}} : {{x.temp.min + unit_temp}}</td>
+					<td>{{'TEMPMAX' | translate}} : {{x.temp.max + unit_temp}}</td>
+				</tr>
+				</tbody>
+				</table>
+				
+				<!-- Modal for the errors -->
+			<div id="errorModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content alert-danger">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">{{'ERROR' | translate}}</h4>
+			  </div>
+			  <div class="modal-body">
+				<p>{{err_info | translate}}</p>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+
+		  </div>
 		</div>
 		</div>
-	
+		</div>
 	</body>
 </html>

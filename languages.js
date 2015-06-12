@@ -7,7 +7,7 @@ var translationEN = {
 		SEARCHNAME:'Search by name',
 		SEARCHZIP:'Search by ZIP code',
 		SEARCHCOORD:'Search by coordinates',
-		WEATHER:'Weather',
+		CURRENT:'Current weather',
 		TEMPERATURE:'Temperature',
 		FORECAST:'-choose forecast-',
 		DAY:' day',
@@ -22,7 +22,11 @@ var translationEN = {
 		TYPE_CITY:'Type a city name',
 		TYPE_LAT:'Type the latitude',
 		TYPE_LON:'Type the longitude',
-		TYPE_ZIP:'Type a ZIP code'
+		TYPE_ZIP:'Type a ZIP code',
+		CHANGE_UNIT:'Unit',
+		METRIC:'Metric (°C)',
+		IMPERIAL:'Imperial (F)',
+		SELECT_CITY:"Select a city"
 };
 
 var translationFR = {
@@ -34,7 +38,7 @@ var translationFR = {
 		SEARCHNAME:'Recherche par nom',
 		SEARCHZIP:'Recherche par code postal',
 		SEARCHCOORD:'Recherche par coordonnées',
-		WEATHER:'Météo',
+		CURRENT:'Météo actuelle',
 		TEMPERATURE:'Température',
 		FORECAST:'-choix prévisions-',
 		DAY:' jour',
