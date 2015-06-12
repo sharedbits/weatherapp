@@ -1,9 +1,6 @@
 /*-------------------------------------------------
 	searchByName(display, service)	
 	Gets the JSON about the cities corresponding to the 'cityName' field and puts it in the 'cities' array of 'display'
-	
-	IN : display ($scope) and service ($http)
-	OUT : n/a
 -------------------------------------------------*/
 function searchByName(display, service, store){
 	display.error = false;
@@ -35,9 +32,6 @@ function searchByName(display, service, store){
 /*-------------------------------------------------	
 	searchByCoord(display, service)
 	Gets the JSON about the city corresponding to the 'lat' and 'lon' fields and puts it in 'city' of 'display'
-	
-	IN : display ($scope) and service ($http)
-	OUT : n/a
 -------------------------------------------------*/
 function searchByCoord(display, service, store){
 	display.error = false;
@@ -59,9 +53,6 @@ function searchByCoord(display, service, store){
 /*-------------------------------------------------	
 	searchByZip(display, service)
 	Gets the JSON about the city corresponding to 'zip' and 'country' fields and puts it in 'city' of 'display'
-	
-	IN : display ($scope) and service ($http)
-	OUT : n/a
 -------------------------------------------------*/
 function searchByZip(display, service, store){
 	display.error=false;
@@ -88,9 +79,6 @@ function searchByZip(display, service, store){
 /*-------------------------------------------------
 	citySelection(display, service, id)	
 	Performs the displaying of the weather information of the city described by 'id'
-	
-	IN : display ($scope), service ($http) and city id (id)	
-	OUT : n/a
 -------------------------------------------------*/
 function citySelection(display, service, id, store){
 	display.error = false;
@@ -113,9 +101,6 @@ function citySelection(display, service, id, store){
 /*-------------------------------------------------
 	getForecast(display, service)
 	Gets the JSON for the X days coming, X defined by 'frcstDay'
-	
-	IN : display ($scope), and service ($http)
-	OUT : n/a
 -------------------------------------------------*/
 function getForecast(display, service){
 	if(display.frcstDay == '')	display.frcst = false;
@@ -140,9 +125,6 @@ function getForecast(display, service){
 /*-------------------------------------------------
 	reloadJSONDisplay(display, service)
 	Reloads the JSON data from the weather API in the newly selected parameters (temperature system, language)
-	
-	IN : display ($scope), and service ($http)
-	OUT : n/a
 -------------------------------------------------*/
 function reloadJSONDisplay(display,service, store){
 	if(display.slctdCity){
@@ -156,9 +138,6 @@ function reloadJSONDisplay(display,service, store){
 /*-------------------------------------------------
 	save(store, city)
 	Stores the data concerning the last selected city in browser's local storage
-	
-	IN : store ($localStorage), and city (whole JSON)
-	OUT :
 -------------------------------------------------*/
 function save(store, city){
 	store.id = city.id;
@@ -168,28 +147,22 @@ function save(store, city){
 /*-------------------------------------------------
 	errorOccurred(display, code)
 	Performs the displaying of the error encountered. The error is identified by its 'code'
-	
-	IN : display ($scope) and error code (code)
-	OUT : n/a
 -------------------------------------------------*/
 function errorOccurred(display, code){
 	switch(code){
 		case 1:{
 			display.err_info = "ERRCASE1";
-			display.error = true;
-			display.slctdCity = true;
+			$("#errorModal").modal();
 		}
 		
 		case 2:{
 			display.err_info = "ERRCASE2";
-			display.error = true;
-			display.slctdCity = true;
+			$("#errorModal").modal();
 		}
 		
 		case 3:{
 			display.err_info = "ERRCASE3";
-			display.error = true;
-			display.slctdCity = true;
+			$("#errorModal").modal();
 		}
 	}
 }
